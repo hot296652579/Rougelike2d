@@ -957,6 +957,22 @@
       {
         "__uuid__": "2241fdf9-7564-4bad-bd9e-37923d45e81e",
         "__expectedType__": "cc.AnimationClip"
+      },
+      {
+        "__uuid__": "abc1a5cf-6de4-46c0-a5b2-bebcf221b1ed",
+        "__expectedType__": "cc.AnimationClip"
+      },
+      {
+        "__uuid__": "fa389df8-d155-4e3e-a8e2-d4e7a6d7d1e4",
+        "__expectedType__": "cc.AnimationClip"
+      },
+      {
+        "__uuid__": "89178ebf-30d2-40ad-89ae-a7478c40d62f",
+        "__expectedType__": "cc.AnimationClip"
+      },
+      {
+        "__uuid__": "fb42cafe-abd0-4421-b703-88a8c99258d9",
+        "__expectedType__": "cc.AnimationClip"
       }
     ],
     "_defaultClip": {

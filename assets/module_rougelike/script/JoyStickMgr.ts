@@ -12,6 +12,7 @@ export class JoyStickMgr extends Component {
     bodySize: Size = null;
     defaultPosition: Vec3 = null;
     inputVec: Vec2 = Vec2.ZERO;
+    angle: number = 0;
 
     start() {
         this.defaultPosition = this.body.getWorldPosition();
@@ -46,7 +47,6 @@ export class JoyStickMgr extends Component {
         // console.log(this.inputVec);
     }
 
-
     private onTouchEnd(event: EventTouch) {
         this.body.setWorldPosition(this.defaultPosition);
         this.stick.setPosition(Vec3.ZERO);
@@ -54,6 +54,40 @@ export class JoyStickMgr extends Component {
     }
 
     update(deltaTime: number) {
-        // Optional: Implement any additional logic needed
+        if (this.inputVec.length() > 0) {
+            const angle = this.vector_to_angle(this.inputVec);
+            this.angle = angle;
+        }
+    }
+
+    /**
+     * @description: 向量转弧度
+     * @param {Vec2} vector:Vec2
+     * @return {*}
+     */
+    private vector_to_angle(vector: Vec2): number {
+        // 将传入的向量归一化
+        let dir = vector.normalize();
+        // 计算出目标角度的弧度
+        let radian = dir.signAngle(new Vec2(1, 0));
+        // 把弧度计算成角度
+        let angle = -this.radian_to_angle(radian);
+        // 返回角度
+        return (angle);
+    }
+
+    /**
+     * @description: 弧度转角度
+     * @param {number} radian
+     * @return {*}
+     */
+    private radian_to_angle(radian: number): number {
+        // 弧度转角度公式
+        // 180 / π * 弧度
+
+        // 计算出角度
+        let angle = 180 / Math.PI * radian;
+        // 返回弧度
+        return (angle);
     }
 }
