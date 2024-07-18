@@ -1854,7 +1854,7 @@
     "_id": "a44p0A2MlDFa+ksOYafRP+"
   },
   {
-    "__type__": "e483cFjmOxC6LCXVHjN7i98",
+    "__type__": "f0b2dLM/FxIe741SWIhemoK",
     "_name": "",
     "_objFlags": 0,
     "__editorExtras__": {},
@@ -1867,7 +1867,7 @@
     "baseAttackSpeed": 0,
     "baseAttackRange": 0,
     "baseDefense": 0,
-    "_id": "efU7eaV21KEoZhvzYuSzNk"
+    "_id": "cdDaqWO9hH1r+nbLwZu/Mf"
   },
   {
     "__type__": "cc.UITransform",
