@@ -1,16 +1,7 @@
-/*
- * @Author: super_javan 296652579@qq.com
- * @Date: 2024-07-17 10:43:35
- * @LastEditors: super_javan 296652579@qq.com
- * @LastEditTime: 2024-07-18 07:53:00
- * @FilePath: /RougelikeGame2D/assets/module_rougelike/script/Actor.ts
- * @Description: 人物怪物基类,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
- */
-
 import { Animation, Component, RigidBody2D, Vec2, Vec3, _decorator } from "cc";
-import { ActorState } from "./State";
+import { ActorState } from "../State";
+import { IAttributeBonus } from "../item/Item";
 const { ccclass, property } = _decorator;
-
 
 // 定义8个朝向
 const directions = [
@@ -24,50 +15,103 @@ const directions = [
     { name: '右下', angle: 315, dir: 'right-down' },
 ];
 
-@ccclass("Actor")
-export class Actor extends Component {
+export interface ICharacter {
+    baseAttack: number;
+    baseAttackSpeed: number;
+    baseAttackRange: number;
+    baseDefense: number;
+
+    currentAttack: number;
+    currentAttackSpeed: number;
+    currentAttackRange: number;
+    currentDefense: number;
+
+    moving(): void;
+    attack(target: ICharacter): void;
+    takeDamage(damage: number): void;
+    applyBonus(bonus: IAttributeBonus): void;
+    removeBonus(bonus: IAttributeBonus): void;
+}
+
+@ccclass("BaseCharacter")
+export class BaseCharacter extends Component implements ICharacter {
+    @property
+    baseAttack: number = 0;
+    @property
+    baseAttackSpeed: number = 0;
+    @property
+    baseAttackRange: number = 0;
+    @property
+    baseDefense: number = 0;
+
+    currentAttack: number = 0;
+    currentAttackSpeed: number = 0;
+    currentAttackRange: number = 0;
+    currentDefense: number = 0;
 
     state: ActorState = ActorState.Idle;
-
-    rigidBody: RigidBody2D = null;
-    animation: Animation = null;
+    rigidBody: RigidBody2D | null = null;
+    animation: Animation | null = null;
     linearSpeed: number = 10;
-
     inputVector: Vec2 = new Vec2();
-
-    speed: number = 100;
     angle: number = 0;
 
+    initialize(baseAttack: number, baseAttackSpeed: number, baseAttackRange: number, baseDefense: number) {
+        this.baseAttack = baseAttack;
+        this.baseAttackSpeed = baseAttackSpeed;
+        this.baseAttackRange = baseAttackRange;
+        this.baseDefense = baseDefense;
+
+        this.currentAttack = baseAttack;
+        this.currentAttackSpeed = baseAttackSpeed;
+        this.currentAttackRange = baseAttackRange;
+        this.currentDefense = baseDefense;
+    }
+
     start(): void {
-        this.animation = this.node.getComponent(Animation)!;
-        this.rigidBody = this.node.getComponent(RigidBody2D)!;
+        this.animation = this.node.getComponent(Animation);
+        this.rigidBody = this.node.getComponent(RigidBody2D);
     }
 
     update(dt: number): void {
         switch (this.state) {
             case ActorState.Walk:
                 this.onDirection();
-                this.onMoving();
+                this.moving();
                 break;
-
             default:
                 break;
         }
     }
 
-    /**
-     * @description: 人物转向
-     * @return {*}
-     */
+    //移动逻辑
+    moving(): void {
+        if (this.inputVector.length() > 0) {
+            const velocity = this.inputVector.normalize().multiplyScalar(this.linearSpeed);
+            this.rigidBody.linearVelocity = velocity;
+        }
+    }
+
+    //停止移动
+    private stopMove(): void {
+        this.rigidBody.linearVelocity = Vec2.ZERO;
+    }
+
+    attack(target: ICharacter): void { }
+
+    takeDamage(damge: number): void { }
+
+    applyBonus(bonus: IAttributeBonus): void { }
+
+    removeBonus(bonus: IAttributeBonus): void { }
+
+    //角度朝向
     protected onDirection(): void {
         if (this.inputVector.length() > 0) {
-            // 将角度转换为0-360度
             if (this.angle < 0) {
                 this.angle += 360;
             }
-            // console.log(`角度 angle:${this.angle}`);
 
-            // 找到最接近的朝向
             let minDiff = 360;
             let direction = directions[0].dir;
 
@@ -91,6 +135,8 @@ export class Actor extends Component {
         }
     }
 
+
+    //切换动画
     private playAnimationByState() {
         switch (this.state) {
             case ActorState.Idle:
@@ -102,17 +148,7 @@ export class Actor extends Component {
         }
     }
 
-    private onMoving(): void {
-        if (this.inputVector.length() > 0) {
-            const velocity = this.inputVector.normalize().multiplyScalar(this.linearSpeed);
-            this.rigidBody.linearVelocity = velocity;
-        }
-    }
-
-    private stopMove(): void {
-        this.rigidBody.linearVelocity = Vec2.ZERO;
-    }
-
+    //改变状态
     changeState(state: ActorState) {
         if (this.state == ActorState.Die) return;
 
@@ -123,4 +159,3 @@ export class Actor extends Component {
         this.playAnimationByState();
     }
 }
-

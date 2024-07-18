@@ -2,7 +2,7 @@
  * @Author: super_javan 296652579@qq.com
  * @Date: 2024-07-17 19:39:05
  * @LastEditors: super_javan 296652579@qq.com
- * @LastEditTime: 2024-07-18 09:44:05
+ * @LastEditTime: 2024-07-18 11:05:47
  * @FilePath: /RougelikeGame2D/assets/module_rougelike/script/MapController.ts
  * @Description: 地图控制器,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE   
  */
@@ -19,11 +19,18 @@ export class MapController extends Component {
     exitPoint: Node = null;
 
     start() {
+        this.addRigidBody2DToObstacle();
+    }
+
+    /**
+     * @description: 障碍物添加静态刚体
+     * @return {*}
+     */
+    private addRigidBody2DToObstacle() {
         // 启用调试绘图
         PhysicsSystem2D.instance.debugDrawFlags = EPhysics2DDrawFlags.Aabb | EPhysics2DDrawFlags.Pair | EPhysics2DDrawFlags.CenterOfMass | EPhysics2DDrawFlags.Joint | EPhysics2DDrawFlags.Shape;
 
         this.tiledMap = this.node.getComponent(TiledMap);
-        // const tileMapSize = this.tiledMap.getMapSize();
 
         const layer = this.tiledMap.getLayer('Obstacle');
         const tiledSize = layer.getMapTileSize();
