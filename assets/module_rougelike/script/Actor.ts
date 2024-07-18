@@ -2,7 +2,7 @@
  * @Author: super_javan 296652579@qq.com
  * @Date: 2024-07-17 10:43:35
  * @LastEditors: super_javan 296652579@qq.com
- * @LastEditTime: 2024-07-17 15:13:27
+ * @LastEditTime: 2024-07-18 07:53:00
  * @FilePath: /RougelikeGame2D/assets/module_rougelike/script/Actor.ts
  * @Description: 人物怪物基类,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -65,7 +65,7 @@ export class Actor extends Component {
             if (this.angle < 0) {
                 this.angle += 360;
             }
-            console.log(`角度 angle:${this.angle}`);
+            // console.log(`角度 angle:${this.angle}`);
 
             // 找到最接近的朝向
             let minDiff = 360;
@@ -82,7 +82,7 @@ export class Actor extends Component {
                 }
             });
 
-            const defaultScale: number = 3;
+            const defaultScale: number = 1;
             if (direction == 'left-up' || direction == 'left' || direction == 'left-down') {
                 this.node.scale = new Vec3(defaultScale, defaultScale, defaultScale);
             } else if (direction == 'right-up' || direction == 'right' || direction == 'right-down') {

@@ -1,13 +1,14 @@
-import { Button, assetManager, AssetManager, director } from "cc";
+import { AssetManager, Button, assetManager, director } from "cc";
+import { tgxUIController, tgxUIMgr, tgxUIWaiting } from "../../core_tgx/tgx";
 import { GameUILayers } from "../../scripts/GameUILayers";
-import { Layout_DemoList } from "./Layout_DemoList";
 import { ModuleDef } from "../../scripts/ModuleDef";
 import { UI_HUD } from "../ui_hud/UI_HUD";
-import { tgxUIController, tgxUIMgr, tgxUIWaiting } from "../../core_tgx/tgx";
+import { Layout_DemoList } from "./Layout_DemoList";
 
 const DemoList = [
     { bundle: ModuleDef.DEMO_TANK, entryScene: 'tank_game' },
-    { bundle: ModuleDef.DEMO_ROOSTER, entryScene: 'rooster_jump' },
+    // { bundle: ModuleDef.DEMO_ROOSTER, entryScene: 'rooster_jump' },
+    { bundle: ModuleDef.ROUGELIKE, entryScene: 'rougelike_ganme' },
 ];
 
 export class UI_DemoList extends tgxUIController {
