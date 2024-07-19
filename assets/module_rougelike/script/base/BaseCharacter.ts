@@ -137,16 +137,7 @@ export class BaseCharacter extends Component implements ICharacter {
 
 
     //切换动画
-    private playAnimationByState() {
-        switch (this.state) {
-            case ActorState.Idle:
-                this.animation.crossFade('player_left_idle', 0.3);
-                break;
-            case ActorState.Walk:
-                this.animation.crossFade('player_left_walk', 0.3);
-                break;
-        }
-    }
+    playAnimationByState() { }
 
     //改变状态
     changeState(state: ActorState) {

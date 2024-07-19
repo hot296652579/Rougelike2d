@@ -2,11 +2,12 @@
  * @Author: super_javan 296652579@qq.com
  * @Date: 2024-07-17 19:39:05
  * @LastEditors: super_javan 296652579@qq.com
- * @LastEditTime: 2024-07-18 11:05:47
+ * @LastEditTime: 2024-07-19 14:40:04
  * @FilePath: /RougelikeGame2D/assets/module_rougelike/script/MapController.ts
  * @Description: 地图控制器,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE   
  */
-import { BoxCollider2D, Component, EPhysics2DDrawFlags, ERigidBody2DType, Node, PhysicsSystem2D, RigidBody2D, TiledMap, _decorator, v2, view } from 'cc';
+import { BoxCollider2D, Component, ERigidBody2DType, Node, PhysicsSystem2D, RigidBody2D, TiledMap, _decorator, v2, view } from 'cc';
+import { PhysicsGroup } from './PhysicsGroup';
 const { ccclass, property } = _decorator;
 
 @ccclass('MapController')
@@ -20,6 +21,19 @@ export class MapController extends Component {
 
     start() {
         this.addRigidBody2DToObstacle();
+        this.printGroupNames();
+    }
+
+    printGroupNames() {
+        const physicsSystem2D = PhysicsSystem2D.instance;
+
+        // 获取碰撞矩阵
+        const collisionMatrix = physicsSystem2D['collisionMatrix'];
+        console.log(collisionMatrix);
+        for (let i = 0; i < collisionMatrix.length; i++) {
+            // const groupName = this.getGroupName(i);
+            console.log(`Group ${i}: ${i}`);
+        }
     }
 
     /**
@@ -28,7 +42,7 @@ export class MapController extends Component {
      */
     private addRigidBody2DToObstacle() {
         // 启用调试绘图
-        PhysicsSystem2D.instance.debugDrawFlags = EPhysics2DDrawFlags.Aabb | EPhysics2DDrawFlags.Pair | EPhysics2DDrawFlags.CenterOfMass | EPhysics2DDrawFlags.Joint | EPhysics2DDrawFlags.Shape;
+        // PhysicsSystem2D.instance.debugDrawFlags = EPhysics2DDrawFlags.Aabb | EPhysics2DDrawFlags.Pair | EPhysics2DDrawFlags.CenterOfMass | EPhysics2DDrawFlags.Joint | EPhysics2DDrawFlags.Shape;
 
         this.tiledMap = this.node.getComponent(TiledMap);
 
@@ -47,14 +61,19 @@ export class MapController extends Component {
                     let newNode = new Node();
                     newNode.setPosition(i * tiledSize.width, j * tiledSize.height);
                     newNode.addComponent(RigidBody2D).type = ERigidBody2DType.Static;
-                    newNode.addComponent(BoxCollider2D);
+                    const rigidBody2D = newNode.addComponent(BoxCollider2D);
+
+
                     let collider = newNode.getComponent(BoxCollider2D);
                     collider.size = tiledSize;
                     collider.offset = v2(tiledSize.width / 2, tiledSize.height / 2);
                     collider.apply();
                     this.node.addChild(newNode);
                     const world = tiled.node.getWorldPosition();
-                    newNode.setWorldPosition(world.x - windowSize.width / 2, world.y - windowSize.height / 2, 0)
+                    newNode.setWorldPosition(world.x - windowSize.width / 2, world.y - windowSize.height / 2, 0);
+
+                    rigidBody2D.group = PhysicsGroup.WALL;
+                    collider.group = PhysicsGroup.WALL;
                 }
             }
         }
