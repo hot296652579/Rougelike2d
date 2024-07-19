@@ -2,7 +2,7 @@
  * @Author: super_javan 296652579@qq.com
  * @Date: 2024-07-18 16:40:27
  * @LastEditors: super_javan 296652579@qq.com
- * @LastEditTime: 2024-07-19 11:30:46
+ * @LastEditTime: 2024-07-19 16:20:36
  * @FilePath: /RougelikeGame2D/assets/module_rougelike/script/enemy/MeleeEnemyController.ts
  * @Description: 蓝色小怪物,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -55,6 +55,6 @@ export class BlueSlimeEnemy extends EnemyController {
     takeDamage(damge: number): void {
         super.takeDamage(damge);
         this.changeState(ActorState.Hit);
-        console.log('小蓝怪物受伤');
+        // console.log('小蓝怪物受伤');
     }
 }

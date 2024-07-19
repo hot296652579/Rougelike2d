@@ -1,6 +1,6 @@
 import { Animation, Component, RigidBody2D, Vec2, Vec3, _decorator } from "cc";
 import { ActorState } from "../State";
-import { IAttributeBonus } from "../item/Item";
+import { AttributeType, IAttributeBonus, Item } from "../item/Item";
 const { ccclass, property } = _decorator;
 
 // 定义8个朝向
@@ -49,6 +49,7 @@ export class BaseCharacter extends Component implements ICharacter {
     currentAttackRange: number = 0;
     currentDefense: number = 0;
 
+    equippedItems: Item[];
     state: ActorState = ActorState.Idle;
     rigidBody: RigidBody2D | null = null;
     animation: Animation | null = null;
@@ -66,6 +67,7 @@ export class BaseCharacter extends Component implements ICharacter {
         this.currentAttackSpeed = baseAttackSpeed;
         this.currentAttackRange = baseAttackRange;
         this.currentDefense = baseDefense;
+        this.equippedItems = [];
     }
 
     start(): void {
@@ -101,9 +103,36 @@ export class BaseCharacter extends Component implements ICharacter {
 
     takeDamage(damge: number): void { }
 
-    applyBonus(bonus: IAttributeBonus): void { }
+    /**
+     * @description: 穿戴物品 增加属性
+     * @param {IAttributeBonus} bonus
+     * @return {*}
+     */
+    applyBonus(bonus: IAttributeBonus): void {
+        switch (bonus.type) {
+            case AttributeType.Attack:
+                this.currentAttack += bonus.value;
+                break;
+            case AttributeType.AttackSpeed:
+                this.currentAttackSpeed += bonus.value;
+                break;
+            case AttributeType.AttackRange:
+                this.currentAttackRange += bonus.value;
+                break;
+            case AttributeType.Defense:
+                this.currentDefense += bonus.value;
+                break;
+            default:
+                break;
+        }
+    }
 
-    removeBonus(bonus: IAttributeBonus): void { }
+    removeBonus(bonus: IAttributeBonus): void {
+        switch (bonus.type) {
+            default:
+                break;
+        }
+    }
 
     //角度朝向
     protected onDirection(): void {
@@ -126,7 +155,7 @@ export class BaseCharacter extends Component implements ICharacter {
                 }
             });
 
-            const defaultScale: number = 1;
+            const defaultScale: number = 3;
             if (direction == 'left-up' || direction == 'left' || direction == 'left-down') {
                 this.node.scale = new Vec3(defaultScale, defaultScale, defaultScale);
             } else if (direction == 'right-up' || direction == 'right' || direction == 'right-down') {

@@ -1,35 +1,49 @@
+import { Collider2D, Component, RigidBody2D } from "cc";
 import { PlayerController } from "../PlayerController";
 
 //物品类型
-enum AttibuteType {
+export enum AttributeType {
     Attack,        //攻击力
     AttackSpeed,  //攻击速度
     AttackRange, //范围
     Defense,     // 防御类型
 }
 
-
-//物品接口
 export interface IAttributeBonus {
-    type: AttibuteType;
+    type: AttributeType;
     value: number;
 }
 
-
-//物品基类
-export abstract class Item {
+export interface ItemData {
     name: string;
     attributeBonuses: IAttributeBonus[];
+}
 
-    constructor(name: string, attributes: IAttributeBonus[]) {
-        this.name = name;
-        this.attributeBonuses = attributes;
+/**
+ * @description: 物品基类
+ * @return {*}
+ */
+export abstract class Item extends Component {
+
+    rigidBody2D: RigidBody2D = null;
+    collider2D: Collider2D = null;
+    itemName: string;
+    attributeBonuses: IAttributeBonus[];
+
+    initialize(data: ItemData): void {
+        this.itemName = data.name;
+        this.attributeBonuses = data.attributeBonuses;
     }
 
-    applyBonus(player: PlayerController): void {
+    applyBonuse(player: PlayerController): void {
         for (let bonus of this.attributeBonuses) {
-            //DOTO 添加玩家穿戴方法
-            // player.applyBonus(bonus);
+            player.applyBonus(bonus);
+        }
+    }
+
+    removeBonuse(player: PlayerController): void {
+        for (let bonus of this.attributeBonuses) {
+            player.removeBonus(bonus);
         }
     }
 }
